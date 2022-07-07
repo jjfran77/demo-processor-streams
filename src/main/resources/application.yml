@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: demo-processor-streams
+  cloud:
+    stream:
+      function:
+        definition: contactProducer;process;clientProducer
+      bindings:
+        contactProducer-out-0:
+          destination: contact
+        process-in-0:
+          destination: contact
+        clientProducer-out-0:
+          destination: client
+      kafka:
+        binder:
+          brokers: 127.0.0.1:9092
+          replication-factor: 1
+          configuration:
+            auto-offset-reset: latest
+          producerProperties:
+            key:
+              serializer: org.apache.kafka.common.serialization.ByteArraySerializer
+
+  sleuth:
+    sampler:
+      probability: 1
+    messaging:
+      kafka:
+        enabled: true
+      messaging:
+        kafka:
+          enabled: true
+    integration:
+      enabled: true
